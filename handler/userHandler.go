@@ -58,10 +58,14 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 
 func UserInfo(w http.ResponseWriter, r *http.Request) {
 
-	usr := service.GetUserService().GetUser(r.Context().Value("user").(uint)) //Create user
+	usr := service.GetUserService().GetUser(getCurrentUser(r)) //Create user
 	if usr != nil {
 		utils.Respond(w, http.StatusOK, usr)
 	} else {
 		utils.Respond(w, http.StatusNotFound, utils.Message("user not found"))
 	}
+}
+
+func getCurrentUser(r *http.Request) uint {
+	return r.Context().Value("user").(uint)
 }

@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-var cardSchemeTable = "cardSchemes"
+const cardSchemeTable = "card_schemes"
 
 type CardScheme struct {
 	gorm.Model
 	Number          string
 	Holder          string
-	UserID          int
+	UserID          uint
 	ExpirationMonth time.Month
 	ExpirationYear  int
 	Type            string
@@ -33,5 +33,5 @@ func GetCardSchemesForUser(userId uint) []*CardScheme {
 
 func DeleteCardSchemeForUser(userId uint, id uint) error {
 
-	return DB.Where("user_id = ? and id = ?", userId, id).Delete(CardScheme{}).Error
+	return DB.Table(cardSchemeTable).Where("user_id = ? and id = ?", userId, id).Delete(CardScheme{}).Error
 }

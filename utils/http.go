@@ -2,8 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/gorilla/context"
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
@@ -20,8 +19,9 @@ func Respond(w http.ResponseWriter, httpStatus int, data interface{}) {
 }
 
 func IntParam(r *http.Request, param string) int {
-	params := context.Get(r, "params").(httprouter.Params)
-	id := params.ByName(param)
+
+	params := mux.Vars(r)
+	id := params[param]
 	if id != "" {
 		p, _ := strconv.Atoi(id)
 		return p
@@ -30,6 +30,6 @@ func IntParam(r *http.Request, param string) int {
 }
 
 func StrParam(r *http.Request, param string) string {
-	params := context.Get(r, "params").(httprouter.Params)
-	return params.ByName(param)
+	params := mux.Vars(r)
+	return params[param]
 }

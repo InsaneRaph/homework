@@ -17,7 +17,7 @@ func CreateCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	schemeDto, err := service.GetCardSchemeService().Create(cardSchemeDto)
+	schemeDto, err := service.GetCardSchemeService().Create(cardSchemeDto, getCurrentUser(r))
 	if err != nil {
 		utils.Respond(w, http.StatusBadRequest, utils.Message(err.Error()))
 	} else {
@@ -28,7 +28,7 @@ func CreateCard(w http.ResponseWriter, r *http.Request) {
 
 func GetUserCards(w http.ResponseWriter, r *http.Request) {
 
-	cards := service.GetCardSchemeService().GetCardSchemesForUser(r.Context().Value("user").(uint))
+	cards := service.GetCardSchemeService().GetCardSchemesForUser(getCurrentUser(r))
 
 	utils.Respond(w, http.StatusOK, cards)
 
@@ -36,7 +36,7 @@ func GetUserCards(w http.ResponseWriter, r *http.Request) {
 
 func DeleteUserCards(w http.ResponseWriter, r *http.Request) {
 
-	err := service.GetCardSchemeService().DeleteCardSchemeForUser(r.Context().Value("user").(uint),
+	err := service.GetCardSchemeService().DeleteCardSchemeForUser(getCurrentUser(r),
 		uint(utils.IntParam(r, "card")))
 	if err != nil {
 		utils.Respond(w, http.StatusBadRequest, utils.Message(err.Error()))

@@ -8,7 +8,7 @@ import (
 )
 
 type cardSchemeSvc interface {
-	Create(cardSchemeDto *dto.CardSchemeDto) (*dto.CardSchemeDto, error)
+	Create(cardSchemeDto *dto.CardSchemeDto, userId uint) (*dto.CardSchemeDto, error)
 	GetCardSchemesForUser(userId uint) []*dto.CardSchemeDto
 	DeleteCardSchemeForUser(userId uint, id uint) error
 }
@@ -27,7 +27,7 @@ func GetCardSchemeService() cardSchemeSvc {
 const visa = "VISA"
 const masterCard = "MASTERCARD"
 
-func (svc carSchemeSvc) Create(cardSchemeDto *dto.CardSchemeDto) (*dto.CardSchemeDto, error) {
+func (svc carSchemeSvc) Create(cardSchemeDto *dto.CardSchemeDto, userId uint) (*dto.CardSchemeDto, error) {
 	schemeType := strings.ToUpper(cardSchemeDto.Type)
 	if !(schemeType == visa || schemeType == masterCard) {
 		return nil, errors.New("unsupported scheme type")
@@ -40,6 +40,7 @@ func (svc carSchemeSvc) Create(cardSchemeDto *dto.CardSchemeDto) (*dto.CardSchem
 	}
 
 	cardScheme := cardSchemeDto.ToCardScheme()
+	cardScheme.UserID = userId
 	err := cardScheme.Create()
 
 	if err != nil {

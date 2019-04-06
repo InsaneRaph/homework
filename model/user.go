@@ -14,7 +14,7 @@ type Token struct {
 	jwt.StandardClaims
 }
 
-var userTable = "users"
+const userTable = "users"
 
 //a struct to rep user account
 type User struct {
