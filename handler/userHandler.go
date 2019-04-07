@@ -47,7 +47,7 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 			msg = "Email address not found"
 			status = http.StatusNotFound
 		} else if err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
-			status = http.StatusUnauthorized
+			status = http.StatusForbidden
 			msg = "Invalid login credentials. Please try again"
 		}
 		utils.Respond(w, status, utils.Message(msg))

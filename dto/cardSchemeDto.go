@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var mask = "**** **** ****"
+const mask = " **** **** ****"
 
 type CardSchemeDto struct {
 	ID              uint       `json:"id,omitempty"`

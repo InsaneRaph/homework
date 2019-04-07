@@ -3,11 +3,12 @@ package service
 import (
 	"errors"
 	"homeworkprojet/dto"
+	"homeworkprojet/external"
 	"homeworkprojet/model"
 	"strings"
 )
 
-type cardSchemeSvc interface {
+type CardSchemeSvc interface {
 	Create(cardSchemeDto *dto.CardSchemeDto, userId uint) (*dto.CardSchemeDto, error)
 	GetCardSchemesForUser(userId uint) []*dto.CardSchemeDto
 	DeleteCardSchemeForUser(userId uint, id uint) error
@@ -17,26 +18,23 @@ type carSchemeSvc struct {
 
 var csSvc *carSchemeSvc
 
-func GetCardSchemeService() cardSchemeSvc {
+func GetCardSchemeService() CardSchemeSvc {
 	if csSvc == nil {
 		csSvc = &carSchemeSvc{}
 	}
 	return csSvc
 }
 
-const visa = "VISA"
-const masterCard = "MASTERCARD"
+
 
 func (svc carSchemeSvc) Create(cardSchemeDto *dto.CardSchemeDto, userId uint) (*dto.CardSchemeDto, error) {
 	schemeType := strings.ToUpper(cardSchemeDto.Type)
-	if !(schemeType == visa || schemeType == masterCard) {
+	if !(schemeType == external.Visa || schemeType == external.MasterCard) {
 		return nil, errors.New("unsupported scheme type")
 	}
 
-	if schemeType == visa {
-		//TODO validate with visa external service
-	} else {
-		//TODO validate with mastercard external service
+	if !external.GetExternalService(schemeType).Validate(cardSchemeDto){
+		return nil, errors.New("invalid card information")
 	}
 
 	cardScheme := cardSchemeDto.ToCardScheme()

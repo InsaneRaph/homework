@@ -20,6 +20,7 @@ func RegisterRoutes() *mux.Router {
 	router.Handle("/api/cards", httpHandlers.ThenFunc(handler.GetUserCards)).Methods("GET")
 	router.Handle("/api/cards", httpHandlers.ThenFunc(handler.CreateCard)).Methods("POST")
 	router.Handle("/api/cards/{card}", httpHandlers.ThenFunc(handler.DeleteUserCards)).Methods("DELETE")
+	router.Handle("/api/cards/{card}/payments", httpHandlers.ThenFunc(handler.GetPayments)).Methods("GET")
 
 	return router
 }

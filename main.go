@@ -23,7 +23,7 @@ func main() {
 	listen := ":" + strconv.Itoa(config.AppConfig.Port)
 	log.Infoln("listening on ", listen)
 
-	err = http.ListenAndServe(listen, cors.Default().Handler(router.RegisterRoutes()))
+	err = http.ListenAndServe(listen, cors.AllowAll().Handler(router.RegisterRoutes()))
 
 	utils.PanicOnError(err)
 

@@ -31,6 +31,12 @@ func GetCardSchemesForUser(userId uint) []*CardScheme {
 	return cards
 }
 
+func GetCardSchemeForUser(userId uint, id uint) *CardScheme {
+	card := &CardScheme{}
+	DB.Table(cardSchemeTable).Where("user_id = ? and id = ?", userId, id).First(card)
+	return card
+}
+
 func DeleteCardSchemeForUser(userId uint, id uint) error {
 
 	return DB.Table(cardSchemeTable).Where("user_id = ? and id = ?", userId, id).Delete(CardScheme{}).Error
